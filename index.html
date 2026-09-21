@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Crie, personalize e teste sua mira para FiveM."
+    >
+
+    <title>Crosshair Generator | FiveM</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+</head>
+
+
+<body>
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <header class="header">
+
+        <div class="container header-content">
+
+            <a
+                href="#inicio"
+                class="logo"
+            >
+
+                <div class="logo-icon">
+                    +
+                </div>
+
+                <div class="logo-text">
+
+                    <strong>
+                        CROSSHAIR
+                    </strong>
+
+                    <span>
+                        GENERATOR
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <nav class="nav">
+
+                <a href="#editor">
+                    Criar Mira
+                </a>
+
+                <a href="#trainer">
+                    Aim Trainer
+                </a>
+
+                <a href="#presets">
+                    Presets
+                </a>
+
+                <a href="#importar">
+                    Importar
+                </a>
+
+                <a href="#como-usar">
+                    Como usar
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+
+    <main>
+
+
+        <!-- ======================================================
+             HERO
+        ======================================================= -->
+
+        <section
+            class="hero"
+            id="inicio"
+        >
+
+            <div class="hero-badge">
+                FIVEM CROSSHAIR TOOL • V3
+            </div>
+
+
+            <h1>
+                CRIE. TESTE.
+                <span>
+                    ACERTE.
+                </span>
+            </h1>
+
+
+            <p>
+                Crie sua própria retícula para FiveM,
+                personalize cada detalhe e teste sua mira
+                em um Aim Trainer direto no navegador.
+            </p>
+
+
+            <div class="hero-actions">
+
+                <a
+                    href="#editor"
+                    class="primary-button"
+                >
+                    CRIAR MINHA MIRA
+                </a>
+
+
+                <a
+                    href="#trainer"
+                    class="secondary-button"
+                >
+                    TESTAR MINHA MIRA
+                </a>
+
+            </div>
+
+
+            <div class="hero-features">
+
+                <span>
+                    ● LIVE PREVIEW
+                </span>
+
+                <span>
+                    ● AIM TRAINER
+                </span>
+
+                <span>
+                    ● IMPORTAR MIRA
+                </span>
+
+                <span>
+                    ● GERAR CÓDIGO
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ======================================================
+             EDITOR
+        ======================================================= -->
+
+        <section
+            class="editor-section"
+            id="editor"
+        >
+
+
+            <div class="section-heading">
+
+                <span>
+                    CROSSHAIR EDITOR
+                </span>
+
+                <h2>
+                    Monte sua retícula.
+                </h2>
+
+                <p>
+                    Personalize sua mira e acompanhe
+                    as alterações em tempo real.
+                </p>
+
+            </div>
+
+
+
+            <!-- TOOLBAR -->
+
+            <div class="editor-toolbar">
+
+
+                <div class="mode-tabs">
+
+                    <button
+                        class="mode-button active"
+                        data-mode="basic"
+                    >
+                        BÁSICO
+                    </button>
+
+
+                    <button
+                        class="mode-button"
+                        data-mode="advanced"
+                    >
+                        AVANÇADO
+                    </button>
+
+                </div>
+
+
+
+                <div class="toolbar-actions">
+
+                    <button id="randomButton">
+                        ⚄ ALEATÓRIA
+                    </button>
+
+                    <button id="resetButton">
+                        ↻ RESETAR
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="editor-grid">
+
+
+                <!-- ==================================================
+                     PREVIEW
+                =================================================== -->
+
+                <div class="preview-card">
+
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-label">
+                                LIVE PREVIEW
+                            </span>
+
+                            <h3>
+                                Visualização
+                            </h3>
+
+                        </div>
+
+
+                        <div class="live-indicator">
+
+                            <span></span>
+
+                            AO VIVO
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="preview-toolbar">
+
+
+                        <div class="background-buttons">
+
+                            <button
+                                class="bg-button active"
+                                data-bg="dark"
+                            >
+                                ESCURO
+                            </button>
+
+                            <button
+                                class="bg-button"
+                                data-bg="light"
+                            >
+                                CLARO
+                            </button>
+
+                            <button
+                                class="bg-button"
+                                data-bg="red"
+                            >
+                                VERMELHO
+                            </button>
+
+                            <button
+                                class="bg-button"
+                                data-bg="blue"
+                            >
+                                AZUL
+                            </button>
+
+                        </div>
+
+
+
+                        <div class="zoom-buttons">
+
+                            <button
+                                class="zoom-button active"
+                                data-zoom="1"
+                            >
+                                1X
+                            </button>
+
+                            <button
+                                class="zoom-button"
+                                data-zoom="2"
+                            >
+                                2X
+                            </button>
+
+                            <button
+                                class="zoom-button"
+                                data-zoom="4"
+                            >
+                                4X
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div
+                        class="preview-area"
+                        id="previewArea"
+                    >
+
+                        <div class="preview-grid"></div>
+
+
+                        <div
+                            class="crosshair-wrapper"
+                            id="crosshairWrapper"
+                        >
+
+                            <div
+                                class="crosshair"
+                                id="crosshair"
+                            >
+
+                                <div
+                                    class="crosshair-line top"
+                                ></div>
+
+                                <div
+                                    class="crosshair-line right"
+                                ></div>
+
+                                <div
+                                    class="crosshair-line bottom"
+                                ></div>
+
+                                <div
+                                    class="crosshair-line left"
+                                ></div>
+
+
+                                <div
+                                    class="crosshair-dot"
+                                    id="crosshairDot"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="preview-footer">
+
+                        <span>
+                            PREVIEW APROXIMADO
+                        </span>
+
+                        <span id="zoomLabel">
+                            ZOOM 1X
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==================================================
+                     CONFIGURAÇÕES
+                =================================================== -->
+
+                <div class="controls-card">
+
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-label">
+                                CONFIGURAÇÕES
+                            </span>
+
+                            <h3>
+                                Personalizar
+                            </h3>
+
+                        </div>
+
+
+                        <span class="status-badge">
+                            EDITANDO
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- COR -->
+
+                    <div class="control-group">
+
+                        <div class="control-title">
+
+                            <label>
+                                Cor da mira
+                            </label>
+
+                            <span id="colorValue">
+                                #FFFFFF
+                            </span>
+
+                        </div>
+
+
+                        <div class="color-editor">
+
+                            <input
+                                type="color"
+                                id="crosshairColor"
+                                value="#ffffff"
+                            >
+
+
+                            <input
+                                type="text"
+                                id="hexInput"
+                                value="#FFFFFF"
+                                maxlength="7"
+                                spellcheck="false"
+                            >
+
+                        </div>
+
+
+
+                        <div class="quick-colors">
+
+
+                            <button
+                                class="quick-color"
+                                data-color="#FFFFFF"
+                                style="--quick:#FFFFFF"
+                                aria-label="Branco"
+                            ></button>
+
+
+                            <button
+                                class="quick-color"
+                                data-color="#A8FF1F"
+                                style="--quick:#A8FF1F"
+                                aria-label="Verde"
+                            ></button>
+
+
+                            <button
+                                class="quick-color"
+                                data-color="#00FFFF"
+                                style="--quick:#00FFFF"
+                                aria-label="Ciano"
+                            ></button>
+
+
+                            <button
+                                class="quick-color"
+                                data-color="#FF3131"
+                                style="--quick:#FF3131"
+                                aria-label="Vermelho"
+                            ></button>
+
+
+                            <button
+                                class="quick-color"
+                                data-color="#FF00FF"
+                                style="--quick:#FF00FF"
+                                aria-label="Rosa"
+                            ></button>
+
+
+                            <button
+                                class="quick-color"
+                                data-color="#FFD600"
+                                style="--quick:#FFD600"
+                                aria-label="Amarelo"
+                            ></button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- RGB -->
+
+                    <div class="control-group advanced-control">
+
+                        <div class="control-title">
+
+                            <label>
+                                RGB
+                            </label>
+
+                            <span>
+                                PERSONALIZADO
+                            </span>
+
+                        </div>
+
+
+                        <div class="rgb-grid">
+
+
+                            <label>
+
+                                R
+
+                                <input
+                                    id="redInput"
+                                    type="number"
+                                    min="0"
+                                    max="255"
+                                    value="255"
+                                >
+
+                            </label>
+
+
+                            <label>
+
+                                G
+
+                                <input
+                                    id="greenInput"
+                                    type="number"
+                                    min="0"
+                                    max="255"
+                                    value="255"
+                                >
+
+                            </label>
+
+
+                            <label>
+
+                                B
+
+                                <input
+                                    id="blueInput"
+                                    type="number"
+                                    min="0"
+                                    max="255"
+                                    value="255"
+                                >
+
+                            </label>
+
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- TAMANHO -->
+
+                    <div class="control-group">
+
+                        <div class="control-title">
+
+                            <label for="crosshairSize">
+                                Tamanho
+                            </label>
+
+
+                            <input
+                                class="number-value"
+                                id="sizeNumber"
+                                type="number"
+                                min="0"
+                                max="30"
+                                step="0.5"
+                                value="5"
+                            >
+
+                        </div>
+
+
+                        <input
+                            type="range"
+                            id="crosshairSize"
+                            min="0"
+                            max="30"
+                            step="0.5"
+                            value="5"
+                        >
+
+                    </div>
+
+
+
+                    <!-- ESPESSURA -->
+
+                    <div class="control-group">
+
+                        <div class="control-title">
+
+                            <label for="crosshairThickness">
+                                Espessura
+                            </label>
+
+
+                            <input
+                                class="number-value"
+                                id="thicknessNumber"
+                                type="number"
+                                min="0.5"
+                                max="10"
+                                step="0.5"
+                                value="1"
+                            >
+
+                        </div>
+
+
+                        <input
+                            type="range"
+                            id="crosshairThickness"
+                            min="0.5"
+                            max="10"
+                            step="0.5"
+                            value="1"
+                        >
+
+                    </div>
+
+
+
+                    <!-- GAP -->
+
+                    <div class="control-group">
+
+                        <div class="control-title">
+
+                            <label for="crosshairGap">
+                                Distância / Gap
+                            </label>
+
+
+                            <input
+                                class="number-value"
+                                id="gapNumber"
+                                type="number"
+                                min="-30"
+                                max="30"
+                                step="1"
+                                value="-2"
+                            >
+
+                        </div>
+
+
+                        <input
+                            type="range"
+                            id="crosshairGap"
+                            min="-30"
+                            max="30"
+                            step="1"
+                            value="-2"
+                        >
+
+                    </div>
+
+
+
+                    <!-- OPACIDADE -->
+
+                    <div class="control-group">
+
+                        <div class="control-title">
+
+                            <label for="crosshairAlpha">
+                                Opacidade
+                            </label>
+
+
+                            <input
+                                class="number-value"
+                                id="alphaNumber"
+                                type="number"
+                                min="0"
+                                max="255"
+                                step="1"
+                                value="255"
+                            >
+
+                        </div>
+
+
+                        <input
+                            type="range"
+                            id="crosshairAlpha"
+                            min="0"
+                            max="255"
+                            step="1"
+                            value="255"
+                        >
+
+                    </div>
+
+
+
+                    <!-- PONTO CENTRAL -->
+
+                    <div class="switch-area">
+
+                        <label class="switch-row">
+
+                            <div>
+
+                                <strong>
+                                    Ponto central
+                                </strong>
+
+                                <span>
+                                    Exibir ponto no centro
+                                </span>
+
+                            </div>
+
+
+                            <input
+                                type="checkbox"
+                                id="crosshairDotToggle"
+                                checked
+                            >
+
+
+                            <span class="switch"></span>
+
+                        </label>
+
+                    </div>
+
+
+
+                    <!-- TAMANHO PONTO -->
+
+                    <div class="control-group advanced-control">
+
+                        <div class="control-title">
+
+                            <label for="dotSize">
+                                Tamanho visual do ponto
+                            </label>
+
+
+                            <input
+                                class="number-value"
+                                id="dotSizeNumber"
+                                type="number"
+                                min="1"
+                                max="10"
+                                value="2"
+                            >
+
+                        </div>
+
+
+                        <input
+                            type="range"
+                            id="dotSize"
+                            min="1"
+                            max="10"
+                            step="1"
+                            value="2"
+                        >
+
+                    </div>
+
+
+
+                    <!-- CONTORNO -->
+
+                    <div class="switch-area">
+
+                        <label class="switch-row">
+
+                            <div>
+
+                                <strong>
+                                    Contorno
+                                </strong>
+
+                                <span>
+                                    Adicionar contorno preto
+                                </span>
+
+                            </div>
+
+
+                            <input
+                                type="checkbox"
+                                id="crosshairOutlineToggle"
+                            >
+
+
+                            <span class="switch"></span>
+
+                        </label>
+
+                    </div>
+
+
+
+                    <!-- ESPESSURA CONTORNO -->
+
+                    <div class="control-group advanced-control">
+
+                        <div class="control-title">
+
+                            <label for="outlineThickness">
+                                Espessura do contorno
+                            </label>
+
+
+                            <input
+                                class="number-value"
+                                id="outlineNumber"
+                                type="number"
+                                min="0"
+                                max="5"
+                                step="0.5"
+                                value="1"
+                            >
+
+                        </div>
+
+
+                        <input
+                            type="range"
+                            id="outlineThickness"
+                            min="0"
+                            max="5"
+                            step="0.5"
+                            value="1"
+                        >
+
+                    </div>
+
+
+
+                    <!-- STYLE -->
+
+                    <div class="control-group advanced-control">
+
+                        <div class="control-title">
+
+                            <label for="crosshairStyle">
+                                Crosshair Style
+                            </label>
+
+                            <span>
+                                AVANÇADO
+                            </span>
+
+                        </div>
+
+
+                        <select id="crosshairStyle">
+
+                            <option value="0">
+                                Style 0
+                            </option>
+
+                            <option value="1">
+                                Style 1
+                            </option>
+
+                            <option value="2">
+                                Style 2
+                            </option>
+
+                            <option value="3">
+                                Style 3
+                            </option>
+
+                            <option
+                                value="4"
+                                selected
+                            >
+                                Style 4
+                            </option>
+
+                            <option value="5">
+                                Style 5
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- FIXED GAP -->
+
+                    <div class="control-group advanced-control">
+
+                        <div class="control-title">
+
+                            <label for="fixedGap">
+                                Fixed Crosshair Gap
+                            </label>
+
+
+                            <input
+                                class="number-value"
+                                id="fixedGapNumber"
+                                type="number"
+                                min="-30"
+                                max="30"
+                                value="-2"
+                            >
+
+                        </div>
+
+
+                        <input
+                            type="range"
+                            id="fixedGap"
+                            min="-30"
+                            max="30"
+                            value="-2"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ======================================================
+                 OUTPUT
+            ======================================================= -->
+
+            <div class="code-card">
+
+
+                <div class="code-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            OUTPUT
+                        </span>
+
+                        <h3>
+                            Seu código
+                        </h3>
+
+                    </div>
+
+
+                    <div class="code-ready">
+
+                        <span></span>
+
+                        PRONTO
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="code-box">
+
+                    <code id="crosshairCode"></code>
+
+                </div>
+
+
+
+                <div class="code-actions">
+
+                    <span>
+                        O código é atualizado automaticamente
+                        conforme você edita.
+                    </span>
+
+
+                    <button id="copyButton">
+                        COPIAR CÓDIGO
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ======================================================
+                 IMPORTADOR
+            ======================================================= -->
+
+            <div
+                class="import-card"
+                id="importar"
+            >
+
+
+                <div class="import-info">
+
+                    <span class="card-label">
+                        IMPORTAR CROSSHAIR
+                    </span>
+
+
+                    <h3>
+                        Já possui uma mira?
+                    </h3>
+
+
+                    <p>
+                        Cole seu código abaixo.
+                        O editor vai interpretar os parâmetros
+                        e reconstruir sua configuração.
+                    </p>
+
+                </div>
+
+
+
+                <textarea
+                    id="importInput"
+                    placeholder='cl_crosshairalpha "255";cl_crosshaircolor "5";cl_crosshaircolor_b "255";...'
+                ></textarea>
+
+
+
+                <div class="import-actions">
+
+                    <span id="importMessage">
+                        Aguardando código...
+                    </span>
+
+
+                    <button id="importButton">
+                        IMPORTAR MIRA
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================================
+             AIM TRAINER
+        =========================================================== -->
+
+        <section
+            class="trainer-section"
+            id="trainer"
+        >
+
+
+            <div class="section-heading">
+
+                <span>
+                    AIM TRAINER
+                </span>
+
+                <h2>
+                    Teste sua mira.
+                </h2>
+
+                <p>
+                    Experimente sua retícula antes de levar
+                    a configuração para o jogo.
+                </p>
+
+            </div>
+
+
+
+            <!-- MODOS -->
+
+            <div class="trainer-modes">
+
+
+                <button
+                    class="trainer-mode active"
+                    data-trainer-mode="gridshot"
+                >
+
+                    <span class="trainer-mode-icon">
+                        ✦
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            GRIDSHOT
+                        </strong>
+
+                        <small>
+                            Velocidade + precisão
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+
+                <button
+                    class="trainer-mode locked"
+                    data-trainer-mode="flick"
+                    disabled
+                >
+
+                    <span class="trainer-mode-icon">
+                        ↗
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            FLICK
+                        </strong>
+
+                        <small>
+                            Em breve
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+
+                <button
+                    class="trainer-mode locked"
+                    data-trainer-mode="precision"
+                    disabled
+                >
+
+                    <span class="trainer-mode-icon">
+                        ◎
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            PRECISION
+                        </strong>
+
+                        <small>
+                            Em breve
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+
+                <button
+                    class="trainer-mode locked"
+                    data-trainer-mode="tracking"
+                    disabled
+                >
+
+                    <span class="trainer-mode-icon">
+                        ◉
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            TRACKING
+                        </strong>
+
+                        <small>
+                            Em breve
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- GAME -->
+
+            <div class="trainer-card">
+
+
+                <!-- HEADER DO GAME -->
+
+                <div class="trainer-header">
+
+
+                    <div>
+
+                        <span class="card-label">
+                            AIM TEST
+                        </span>
+
+                        <h3>
+                            Gridshot
+                        </h3>
+
+                    </div>
+
+
+
+                    <div class="trainer-status">
+
+                        <span
+                            class="trainer-status-dot"
+                            id="trainerStatusDot"
+                        ></span>
+
+                        <span id="trainerStatusText">
+                            AGUARDANDO
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- HUD -->
+
+                <div class="trainer-hud">
+
+
+                    <div class="hud-stat">
+
+                        <span>
+                            SCORE
+                        </span>
+
+                        <strong id="trainerScore">
+                            0
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="hud-stat">
+
+                        <span>
+                            HITS
+                        </span>
+
+                        <strong id="trainerHits">
+                            0
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="hud-stat">
+
+                        <span>
+                            MISSES
+                        </span>
+
+                        <strong id="trainerMisses">
+                            0
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="hud-stat">
+
+                        <span>
+                            ACCURACY
+                        </span>
+
+                        <strong id="trainerAccuracy">
+                            100%
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="hud-stat timer-stat">
+
+                        <span>
+                            TIME
+                        </span>
+
+                        <strong id="trainerTime">
+                            30.0
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ARENA -->
+
+                <div
+                    class="trainer-arena"
+                    id="trainerArena"
+                >
+
+
+                    <div class="arena-grid"></div>
+
+
+                    <!-- INFO ANTES DE COMEÇAR -->
+
+                    <div
+                        class="trainer-start-screen"
+                        id="trainerStartScreen"
+                    >
+
+
+                        <div class="start-icon">
+                            +
+                        </div>
+
+
+                        <span>
+                            GRIDSHOT
+                        </span>
+
+
+                        <h3>
+                            Teste sua retícula
+                        </h3>
+
+
+                        <p>
+                            Acerte o máximo de alvos possível
+                            em 30 segundos.
+                        </p>
+
+
+                        <button id="startTrainerButton">
+                            ▶ INICIAR TESTE
+                        </button>
+
+
+                        <small>
+                            Sua mira atual será usada automaticamente.
+                        </small>
+
+
+                    </div>
+
+
+
+                    <!-- COUNTDOWN -->
+
+                    <div
+                        class="trainer-countdown hidden"
+                        id="trainerCountdown"
+                    >
+                        3
+                    </div>
+
+
+
+                    <!-- CAMADA DOS ALVOS -->
+
+                    <div
+                        class="targets-layer"
+                        id="targetsLayer"
+                    ></div>
+
+
+
+                    <!-- MIRA DO TRAINER -->
+
+                    <div
+                        class="trainer-crosshair-wrapper"
+                        id="trainerCrosshairWrapper"
+                    >
+
+                        <div
+                            class="trainer-crosshair"
+                            id="trainerCrosshair"
+                        >
+
+                            <div
+                                class="trainer-crosshair-line trainer-top"
+                            ></div>
+
+                            <div
+                                class="trainer-crosshair-line trainer-right"
+                            ></div>
+
+                            <div
+                                class="trainer-crosshair-line trainer-bottom"
+                            ></div>
+
+                            <div
+                                class="trainer-crosshair-line trainer-left"
+                            ></div>
+
+
+                            <div
+                                class="trainer-crosshair-dot"
+                                id="trainerCrosshairDot"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- COMBO -->
+
+                    <div
+                        class="trainer-combo hidden"
+                        id="trainerCombo"
+                    >
+                        2X COMBO
+                    </div>
+
+
+
+                    <!-- RESULTADO -->
+
+                    <div
+                        class="trainer-result hidden"
+                        id="trainerResult"
+                    >
+
+
+                        <span class="result-label">
+                            TESTE FINALIZADO
+                        </span>
+
+
+                        <h3>
+                            Resultado
+                        </h3>
+
+
+
+                        <div class="result-score">
+
+                            <span>
+                                SCORE
+                            </span>
+
+                            <strong id="resultScore">
+                                0
+                            </strong>
+
+                        </div>
+
+
+
+                        <div class="result-grid">
+
+
+                            <div>
+
+                                <span>
+                                    HITS
+                                </span>
+
+                                <strong id="resultHits">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    MISSES
+                                </span>
+
+                                <strong id="resultMisses">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    ACCURACY
+                                </span>
+
+                                <strong id="resultAccuracy">
+                                    0%
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    BEST COMBO
+                                </span>
+
+                                <strong id="resultCombo">
+                                    0X
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div class="result-actions">
+
+
+                            <button
+                                id="restartTrainerButton"
+                                class="primary-trainer-button"
+                            >
+                                ↻ JOGAR NOVAMENTE
+                            </button>
+
+
+                            <a
+                                href="#editor"
+                                class="secondary-trainer-button"
+                            >
+                                AJUSTAR MIRA
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- FOOTER GAME -->
+
+                <div class="trainer-footer">
+
+
+                    <div class="trainer-tip">
+
+                        <span>
+                            DICA
+                        </span>
+
+                        Teste diferentes tamanhos,
+                        gaps e cores para encontrar
+                        uma mira confortável.
+
+                    </div>
+
+
+
+                    <button
+                        id="fullscreenTrainerButton"
+                        class="fullscreen-button"
+                    >
+                        ⛶ TELA CHEIA
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================================
+             PRESETS
+        =========================================================== -->
+
+        <section
+            class="presets-section"
+            id="presets"
+        >
+
+
+            <div class="section-heading">
+
+                <span>
+                    PRESETS
+                </span>
+
+                <h2>
+                    Miras prontas.
+                </h2>
+
+                <p>
+                    Escolha uma configuração como base
+                    e personalize do seu jeito.
+                </p>
+
+            </div>
+
+
+
+            <div class="preset-grid">
+
+
+                <button
+                    class="preset-card"
+                    data-preset="dot"
+                >
+
+                    <div class="preset-visual">
+
+                        <span class="dot-demo"></span>
+
+                    </div>
+
+                    <strong>
+                        DOT
+                    </strong>
+
+                    <small>
+                        Somente ponto
+                    </small>
+
+                </button>
+
+
+
+                <button
+                    class="preset-card"
+                    data-preset="classic"
+                >
+
+                    <div class="preset-visual">
+
+                        <span
+                            class="cross-demo classic-demo"
+                        ></span>
+
+                    </div>
+
+                    <strong>
+                        CLASSIC
+                    </strong>
+
+                    <small>
+                        Tradicional
+                    </small>
+
+                </button>
+
+
+
+                <button
+                    class="preset-card"
+                    data-preset="tight"
+                >
+
+                    <div class="preset-visual">
+
+                        <span
+                            class="cross-demo tight-demo"
+                        ></span>
+
+                    </div>
+
+                    <strong>
+                        TIGHT
+                    </strong>
+
+                    <small>
+                        Compacta
+                    </small>
+
+                </button>
+
+
+
+                <button
+                    class="preset-card"
+                    data-preset="large"
+                >
+
+                    <div class="preset-visual">
+
+                        <span
+                            class="cross-demo large-demo"
+                        ></span>
+
+                    </div>
+
+                    <strong>
+                        LARGE
+                    </strong>
+
+                    <small>
+                        Maior visibilidade
+                    </small>
+
+                </button>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================================
+             COMO USAR
+        =========================================================== -->
+
+        <section
+            class="how-section"
+            id="como-usar"
+        >
+
+
+            <span>
+                COMO USAR
+            </span>
+
+
+            <h2>
+                Crie. Teste. Copie.
+            </h2>
+
+
+            <p>
+                Personalize sua retícula no editor,
+                teste no Aim Trainer e copie o código
+                quando encontrar a configuração ideal.
+            </p>
+
+
+            <div class="steps-grid">
+
+
+                <div class="step-card">
+
+                    <span>
+                        01
+                    </span>
+
+                    <strong>
+                        CRIE
+                    </strong>
+
+                    <p>
+                        Personalize tamanho,
+                        espessura, gap e cor.
+                    </p>
+
+                </div>
+
+
+
+                <div class="step-card">
+
+                    <span>
+                        02
+                    </span>
+
+                    <strong>
+                        TESTE
+                    </strong>
+
+                    <p>
+                        Experimente sua mira
+                        no Aim Trainer.
+                    </p>
+
+                </div>
+
+
+
+                <div class="step-card">
+
+                    <span>
+                        03
+                    </span>
+
+                    <strong>
+                        AJUSTE
+                    </strong>
+
+                    <p>
+                        Volte ao editor e faça
+                        os ajustes necessários.
+                    </p>
+
+                </div>
+
+
+
+                <div class="step-card">
+
+                    <span>
+                        04
+                    </span>
+
+                    <strong>
+                        COPIE
+                    </strong>
+
+                    <p>
+                        Copie o código gerado
+                        e use sua configuração.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ==========================================================
+         FOOTER
+    =========================================================== -->
+
+    <footer>
+
+        <strong>
+            CROSSHAIR GENERATOR
+        </strong>
+
+        <span>
+            FiveM Crosshair Tool • V3
+        </span>
+
+    </footer>
+
+
+
+    <!-- ==========================================================
+         JAVASCRIPT
+
+         IMPORTANTE:
+         app.js precisa carregar ANTES de trainer.js.
+    =========================================================== -->
+
+    <script src="js/app.js"></script>
+    <script src="js/trainer.js"></script>
+
+
+</body>
+
+</html>
