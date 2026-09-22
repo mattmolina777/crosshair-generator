@@ -1,6 +1,12 @@
 const $ = (id) => document.getElementById(id);
 
+
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
+
 const el = {
+
     color: $("crosshairColor"),
     hex: $("hexInput"),
 
@@ -54,13 +60,34 @@ const el = {
     importButton: $("importButton"),
     importMessage: $("importMessage"),
 
-    zoomLabel: $("zoomLabel")
+    zoomLabel: $("zoomLabel"),
+
+    /* RESOLUÇÃO */
+
+    gameResolution: $("gameResolution"),
+
+    customResolution: $("customResolution"),
+
+    customResolutionWidth:
+        $("customResolutionWidth"),
+
+    customResolutionHeight:
+        $("customResolutionHeight"),
+
+    resolutionPreviewLabel:
+        $("resolutionPreviewLabel")
 };
 
 
 const lines =
-    document.querySelectorAll(".crosshair-line");
+    document.querySelectorAll(
+        ".crosshair-line"
+    );
 
+
+/* =========================================================
+   UTILIDADES
+   ========================================================= */
 
 function clamp(value, min, max) {
 
@@ -74,6 +101,7 @@ function clamp(value, min, max) {
         Math.max(value, min),
         max
     );
+
 }
 
 
@@ -104,18 +132,37 @@ function hexToRgb(hex) {
     const value =
         hex.replace("#", "");
 
-    if (!/^[0-9A-Fa-f]{6}$/.test(value)) {
+    if (
+        !/^[0-9A-Fa-f]{6}$/.test(value)
+    ) {
         return null;
     }
 
     return {
-        r: parseInt(value.slice(0, 2), 16),
-        g: parseInt(value.slice(2, 4), 16),
-        b: parseInt(value.slice(4, 6), 16)
+
+        r: parseInt(
+            value.slice(0, 2),
+            16
+        ),
+
+        g: parseInt(
+            value.slice(2, 4),
+            16
+        ),
+
+        b: parseInt(
+            value.slice(4, 6),
+            16
+        )
+
     };
 
 }
 
+
+/* =========================================================
+   COR
+   ========================================================= */
 
 function setColor(hex) {
 
@@ -151,7 +198,15 @@ function setColor(hex) {
 }
 
 
+/* =========================================================
+   SINCRONIZA RANGE + NUMBER
+   ========================================================= */
+
 function syncPair(range, number) {
+
+    if (!range || !number) {
+        return;
+    }
 
     range.addEventListener(
         "input",
@@ -184,6 +239,9 @@ function syncPair(range, number) {
                 );
 
             range.value =
+                value;
+
+            number.value =
                 value;
 
             update();
@@ -230,28 +288,288 @@ syncPair(
 );
 
 
+/* =========================================================
+   RESOLUÇÃO DO JOGO
+   ========================================================= */
+
+/*
+    IMPORTANTE:
+
+    A resolução NÃO altera o comando do FiveM.
+
+    Ela existe para calibrarmos o PREVIEW
+    de acordo com a resolução usada pelo jogador.
+
+    Neste momento todos os fatores estão em 1.
+
+    Quando fizermos os testes reais no FiveM,
+    alteraremos somente esses fatores.
+*/
+
+const resolutionProfiles = {
+
+    "1280x720": 1,
+
+    "1366x768": 1,
+
+    "1600x900": 1,
+
+    "1920x1080": 1,
+
+    "2560x1440": 1,
+
+    "3840x2160": 1,
+
+    "custom": 1
+
+};
+
+
+/* =========================================================
+   PEGAR RESOLUÇÃO SELECIONADA
+   ========================================================= */
+
+function getSelectedResolution() {
+
+    /*
+        Segurança para caso o HTML antigo
+        ainda esteja sendo usado.
+    */
+
+    if (!el.gameResolution) {
+
+        return {
+
+            key:
+                "1920x1080",
+
+            width:
+                1920,
+
+            height:
+                1080,
+
+            factor:
+                1
+
+        };
+
+    }
+
+
+    const selected =
+        el.gameResolution.value;
+
+
+    /*
+        RESOLUÇÃO PERSONALIZADA
+    */
+
+    if (
+        selected === "custom"
+    ) {
+
+        const width =
+            clamp(
+                el.customResolutionWidth
+                    ? el.customResolutionWidth.value
+                    : 1920,
+                640,
+                7680
+            );
+
+
+        const height =
+            clamp(
+                el.customResolutionHeight
+                    ? el.customResolutionHeight.value
+                    : 1080,
+                480,
+                4320
+            );
+
+
+        return {
+
+            key:
+                "custom",
+
+            width,
+
+            height,
+
+            factor:
+                resolutionProfiles.custom
+
+        };
+
+    }
+
+
+    /*
+        RESOLUÇÕES PRÉ-DEFINIDAS
+    */
+
+    const parts =
+        selected.split("x");
+
+
+    const width =
+        Number(parts[0]);
+
+
+    const height =
+        Number(parts[1]);
+
+
+    return {
+
+        key:
+            selected,
+
+        width,
+
+        height,
+
+        factor:
+            resolutionProfiles[selected] ?? 1
+
+    };
+
+}
+
+
+/* =========================================================
+   ATUALIZAR INFORMAÇÕES DE RESOLUÇÃO
+   ========================================================= */
+
+function updateResolutionUI() {
+
+    if (!el.gameResolution) {
+        return;
+    }
+
+
+    const isCustom =
+        el.gameResolution.value ===
+        "custom";
+
+
+    /*
+        MOSTRAR / ESCONDER CAMPOS
+        DE RESOLUÇÃO PERSONALIZADA
+    */
+
+    if (el.customResolution) {
+
+        el.customResolution
+            .classList
+            .toggle(
+                "hidden",
+                !isCustom
+            );
+
+    }
+
+
+    const resolution =
+        getSelectedResolution();
+
+
+    /*
+        TEXTO ABAIXO DO PREVIEW
+    */
+
+    if (
+        el.resolutionPreviewLabel
+    ) {
+
+        el.resolutionPreviewLabel
+            .textContent =
+            `PREVIEW • ${resolution.width}×${resolution.height}`;
+
+    }
+
+
+    update();
+
+}
+
+
+/* =========================================================
+   EVENTOS DE RESOLUÇÃO
+   ========================================================= */
+
+if (el.gameResolution) {
+
+    el.gameResolution
+        .addEventListener(
+            "change",
+            updateResolutionUI
+        );
+
+}
+
+
+[
+    el.customResolutionWidth,
+    el.customResolutionHeight
+]
+    .filter(Boolean)
+    .forEach(input => {
+
+        input.addEventListener(
+            "input",
+            updateResolutionUI
+        );
+
+    });
+
+
+/* =========================================================
+   PREVIEW
+   ========================================================= */
+
 function update() {
 
     const color =
         el.color.value;
 
+
     const size =
-        Number(el.size.value);
+        Number(
+            el.size.value
+        );
+
 
     const thickness =
-        Number(el.thickness.value);
+        Number(
+            el.thickness.value
+        );
+
 
     const gap =
-        Number(el.gap.value);
+        Number(
+            el.gap.value
+        );
+
 
     const alpha =
-        Number(el.alpha.value);
+        Number(
+            el.alpha.value
+        );
+
 
     const dotSize =
-        Number(el.dotSize.value);
+        Number(
+            el.dotSize.value
+        );
+
 
     const outlineThickness =
-        Number(el.outlineThickness.value);
+        Number(
+            el.outlineThickness.value
+        );
 
 
     const opacity =
@@ -263,30 +581,89 @@ function update() {
 
 
     /*
-        Escala apenas para visualização.
+        =====================================================
+        RESOLUÇÃO
+        =====================================================
 
-        O código gerado continua usando
-        os valores originais.
+        Por enquanto o fator é 1.0.
+
+        Portanto mudar a resolução NÃO modifica
+        visualmente a mira ainda.
+
+        Isso é proposital.
+
+        Vamos calibrar depois dos testes reais.
+    */
+
+    const resolution =
+        getSelectedResolution();
+
+
+    const resolutionFactor =
+        resolution.factor;
+
+
+    /*
+        =====================================================
+        TAMANHO
+        =====================================================
+
+        Calibração atual do preview:
+
+        size * 3
+
+        A resolução será aplicada em cima dessa
+        calibração quando tivermos os testes.
     */
 
     const visualSize =
         Math.max(
             0,
-            size * 4
+            size *
+            3 *
+            resolutionFactor
         );
+
+
+    /*
+        =====================================================
+        ESPESSURA
+        =====================================================
+    */
 
     const visualThickness =
         Math.max(
             1,
-            thickness * 2
+            thickness *
+            2 *
+            resolutionFactor
         );
+
+
+    /*
+        =====================================================
+        GAP
+        =====================================================
+
+        Calibração atual:
+
+        gap 0  -> 5px
+        gap -2 -> 3px
+
+        Valores muito negativos fecham a mira.
+    */
 
     const visualGap =
         Math.max(
             0,
-            (gap + 30) * 0.55
+            (gap + 5) *
+            resolutionFactor
         );
 
+
+    /*
+        CONTORNO
+    */
 
     const shadow =
         el.outline.checked
@@ -296,6 +673,10 @@ function update() {
             )}px #000`
             : "none";
 
+
+    /*
+        CONFIGURA TODAS AS LINHAS
+    */
 
     lines.forEach(line => {
 
@@ -316,26 +697,37 @@ function update() {
     });
 
 
+    /*
+        PEGAMOS AS QUATRO HASTES
+    */
+
     const top =
         document.querySelector(
             ".crosshair-line.top"
         );
+
 
     const bottom =
         document.querySelector(
             ".crosshair-line.bottom"
         );
 
+
     const left =
         document.querySelector(
             ".crosshair-line.left"
         );
+
 
     const right =
         document.querySelector(
             ".crosshair-line.right"
         );
 
+
+    /*
+        CIMA
+    */
 
     top.style.width =
         visualThickness + "px";
@@ -344,11 +736,16 @@ function update() {
         visualSize + "px";
 
     top.style.left =
-        -(visualThickness / 2) + "px";
+        -(visualThickness / 2) +
+        "px";
 
     top.style.bottom =
         visualGap + "px";
 
+
+    /*
+        BAIXO
+    */
 
     bottom.style.width =
         visualThickness + "px";
@@ -357,11 +754,16 @@ function update() {
         visualSize + "px";
 
     bottom.style.left =
-        -(visualThickness / 2) + "px";
+        -(visualThickness / 2) +
+        "px";
 
     bottom.style.top =
         visualGap + "px";
 
+
+    /*
+        ESQUERDA
+    */
 
     left.style.width =
         visualSize + "px";
@@ -373,8 +775,13 @@ function update() {
         visualGap + "px";
 
     left.style.top =
-        -(visualThickness / 2) + "px";
+        -(visualThickness / 2) +
+        "px";
 
+
+    /*
+        DIREITA
+    */
 
     right.style.width =
         visualSize + "px";
@@ -386,34 +793,52 @@ function update() {
         visualGap + "px";
 
     right.style.top =
-        -(visualThickness / 2) + "px";
+        -(visualThickness / 2) +
+        "px";
 
+
+    /*
+        PONTO CENTRAL
+    */
 
     el.dotElement.style.display =
         el.dot.checked
             ? "block"
             : "none";
 
+
     el.dotElement.style.width =
         dotSize + "px";
+
 
     el.dotElement.style.height =
         dotSize + "px";
 
+
     el.dotElement.style.background =
         color;
 
+
     el.dotElement.style.opacity =
         opacity;
+
 
     el.dotElement.style.boxShadow =
         shadow;
 
 
+    /*
+        ATUALIZA CÓDIGO
+    */
+
     generateCode();
 
 }
 
+
+/* =========================================================
+   GERADOR DO CÓDIGO FIVEM
+   ========================================================= */
 
 function generateCode() {
 
@@ -422,6 +847,16 @@ function generateCode() {
             el.color.value
         );
 
+
+    /*
+        A resolução NÃO aparece aqui.
+
+        O código FiveM continua utilizando
+        exatamente os valores configurados
+        pelo jogador.
+
+        STYLE 4 permanece fixo.
+    */
 
     const command =
 
@@ -441,7 +876,7 @@ function generateCode() {
 
         `cl_crosshairsize "${el.size.value}";` +
 
-        `cl_crosshairstyle "${el.style.value}";` +
+        `cl_crosshairstyle "4";` +
 
         `cl_crosshairusealpha "1";` +
 
@@ -460,7 +895,9 @@ function generateCode() {
 }
 
 
-/* COLOR PICKER */
+/* =========================================================
+   COLOR PICKER
+   ========================================================= */
 
 el.color.addEventListener(
     "input",
@@ -476,7 +913,9 @@ el.color.addEventListener(
 );
 
 
-/* HEX */
+/* =========================================================
+   HEX
+   ========================================================= */
 
 el.hex.addEventListener(
     "input",
@@ -485,11 +924,22 @@ el.hex.addEventListener(
         let value =
             el.hex.value.trim();
 
-        if (!value.startsWith("#")) {
-            value = "#" + value;
+
+        if (
+            !value.startsWith("#")
+        ) {
+
+            value =
+                "#" + value;
+
         }
 
-        if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+
+        if (
+            /^#[0-9A-Fa-f]{6}$/.test(
+                value
+            )
+        ) {
 
             setColor(value);
 
@@ -501,7 +951,9 @@ el.hex.addEventListener(
 );
 
 
-/* RGB */
+/* =========================================================
+   RGB
+   ========================================================= */
 
 function updateFromRgb() {
 
@@ -511,6 +963,7 @@ function updateFromRgb() {
             el.green.value,
             el.blue.value
         );
+
 
     setColor(hex);
 
@@ -523,20 +976,25 @@ function updateFromRgb() {
     el.red,
     el.green,
     el.blue
-].forEach(input => {
+]
+    .forEach(input => {
 
-    input.addEventListener(
-        "input",
-        updateFromRgb
-    );
+        input.addEventListener(
+            "input",
+            updateFromRgb
+        );
 
-});
+    });
 
 
-/* QUICK COLORS */
+/* =========================================================
+   CORES RÁPIDAS
+   ========================================================= */
 
 document
-    .querySelectorAll(".quick-color")
+    .querySelectorAll(
+        ".quick-color"
+    )
     .forEach(button => {
 
         button.addEventListener(
@@ -555,26 +1013,65 @@ document
     });
 
 
-/* TOGGLES + STYLE */
+/* =========================================================
+   TOGGLES
+   ========================================================= */
 
 [
     el.dot,
-    el.outline,
-    el.style
-].forEach(input => {
+    el.outline
+]
+    .forEach(input => {
 
-    input.addEventListener(
+        input.addEventListener(
+            "change",
+            update
+        );
+
+    });
+
+
+/* =========================================================
+   STYLE
+   ========================================================= */
+
+/*
+    O gerador continua trabalhando
+    com Style 4 nesta versão.
+
+    A questão de resolução será testada
+    separadamente depois.
+*/
+
+if (el.style) {
+
+    el.style.value =
+        4;
+
+
+    el.style.addEventListener(
         "change",
-        update
+        () => {
+
+            el.style.value =
+                4;
+
+            update();
+
+        }
     );
 
-});
+}
 
 
-/* BASIC / ADVANCED */
+/* =========================================================
+   BÁSICO / AVANÇADO
+   ========================================================= */
 
 document
-    .querySelectorAll(".mode-button")
+    .querySelectorAll(
+        ".mode-button"
+    )
     .forEach(button => {
 
         button.addEventListener(
@@ -582,12 +1079,21 @@ document
             () => {
 
                 document
-                    .querySelectorAll(".mode-button")
-                    .forEach(item =>
-                        item.classList.remove("active")
-                    );
+                    .querySelectorAll(
+                        ".mode-button"
+                    )
+                    .forEach(item => {
 
-                button.classList.add("active");
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    });
+
+
+                button.classList.add(
+                    "active"
+                );
 
 
                 if (
@@ -597,13 +1103,17 @@ document
 
                     document.body
                         .classList
-                        .add("advanced-mode");
+                        .add(
+                            "advanced-mode"
+                        );
 
                 } else {
 
                     document.body
                         .classList
-                        .remove("advanced-mode");
+                        .remove(
+                            "advanced-mode"
+                        );
 
                 }
 
@@ -613,10 +1123,14 @@ document
     });
 
 
-/* BACKGROUNDS */
+/* =========================================================
+   BACKGROUNDS
+   ========================================================= */
 
 document
-    .querySelectorAll(".bg-button")
+    .querySelectorAll(
+        ".bg-button"
+    )
     .forEach(button => {
 
         button.addEventListener(
@@ -624,12 +1138,21 @@ document
             () => {
 
                 document
-                    .querySelectorAll(".bg-button")
-                    .forEach(item =>
-                        item.classList.remove("active")
-                    );
+                    .querySelectorAll(
+                        ".bg-button"
+                    )
+                    .forEach(item => {
 
-                button.classList.add("active");
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    });
+
+
+                button.classList.add(
+                    "active"
+                );
 
 
                 el.preview.classList.remove(
@@ -643,7 +1166,9 @@ document
                     button.dataset.bg;
 
 
-                if (bg !== "dark") {
+                if (
+                    bg !== "dark"
+                ) {
 
                     el.preview
                         .classList
@@ -657,10 +1182,14 @@ document
     });
 
 
-/* ZOOM */
+/* =========================================================
+   ZOOM
+   ========================================================= */
 
 document
-    .querySelectorAll(".zoom-button")
+    .querySelectorAll(
+        ".zoom-button"
+    )
     .forEach(button => {
 
         button.addEventListener(
@@ -668,12 +1197,21 @@ document
             () => {
 
                 document
-                    .querySelectorAll(".zoom-button")
-                    .forEach(item =>
-                        item.classList.remove("active")
-                    );
+                    .querySelectorAll(
+                        ".zoom-button"
+                    )
+                    .forEach(item => {
 
-                button.classList.add("active");
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    });
+
+
+                button.classList.add(
+                    "active"
+                );
 
 
                 const zoom =
@@ -695,48 +1233,67 @@ document
     });
 
 
-/* RESET */
+/* =========================================================
+   RESET
+   ========================================================= */
 
 function resetCrosshair() {
 
-    setColor("#FFFFFF");
+    setColor(
+        "#FFFFFF"
+    );
+
 
     el.size.value =
     el.sizeNumber.value =
         5;
 
+
     el.thickness.value =
     el.thicknessNumber.value =
         1;
+
 
     el.gap.value =
     el.gapNumber.value =
         -2;
 
+
     el.alpha.value =
     el.alphaNumber.value =
         255;
 
+
     el.dot.checked =
         true;
+
 
     el.dotSize.value =
     el.dotSizeNumber.value =
         2;
 
+
     el.outline.checked =
         false;
+
 
     el.outlineThickness.value =
     el.outlineNumber.value =
         1;
 
-    el.style.value =
-        4;
+
+    if (el.style) {
+
+        el.style.value =
+            4;
+
+    }
+
 
     el.fixedGap.value =
     el.fixedGapNumber.value =
         -2;
+
 
     update();
 
@@ -749,7 +1306,9 @@ el.reset.addEventListener(
 );
 
 
-/* RANDOM */
+/* =========================================================
+   MIRA ALEATÓRIA
+   ========================================================= */
 
 el.random.addEventListener(
     "click",
@@ -757,6 +1316,7 @@ el.random.addEventListener(
 
         const random =
             (min, max) =>
+
                 Math.floor(
                     Math.random() *
                     (max - min + 1)
@@ -765,9 +1325,22 @@ el.random.addEventListener(
 
         const color =
             rgbToHex(
-                random(0,255),
-                random(0,255),
-                random(0,255)
+
+                random(
+                    0,
+                    255
+                ),
+
+                random(
+                    0,
+                    255
+                ),
+
+                random(
+                    0,
+                    255
+                )
+
             );
 
 
@@ -776,17 +1349,26 @@ el.random.addEventListener(
 
         el.size.value =
         el.sizeNumber.value =
-            random(1,8);
+            random(
+                2,
+                8
+            );
 
 
         el.thickness.value =
         el.thicknessNumber.value =
-            random(1,3);
+            random(
+                1,
+                3
+            );
 
 
         el.gap.value =
         el.gapNumber.value =
-            random(-15,5);
+            random(
+                -5,
+                3
+            );
 
 
         el.alpha.value =
@@ -807,13 +1389,23 @@ el.random.addEventListener(
             el.gap.value;
 
 
+        if (el.style) {
+
+            el.style.value =
+                4;
+
+        }
+
+
         update();
 
     }
 );
 
 
-/* COPY */
+/* =========================================================
+   COPIAR CÓDIGO
+   ========================================================= */
 
 el.copy.addEventListener(
     "click",
@@ -821,12 +1413,15 @@ el.copy.addEventListener(
 
         try {
 
-            await navigator.clipboard.writeText(
-                el.code.textContent
-            );
+            await navigator.clipboard
+                .writeText(
+                    el.code.textContent
+                );
+
 
             el.copy.textContent =
                 "✓ CÓDIGO COPIADO";
+
 
             setTimeout(
                 () => {
@@ -838,6 +1433,7 @@ el.copy.addEventListener(
                 1600
             );
 
+
         } catch {
 
             el.copy.textContent =
@@ -846,10 +1442,9 @@ el.copy.addEventListener(
         }
 
     }
-);
-
-
-/* IMPORT */
+);/* =========================================================
+   IMPORTAÇÃO
+   ========================================================= */
 
 function readCommandValue(
     text,
@@ -858,14 +1453,19 @@ function readCommandValue(
 
     const expression =
         new RegExp(
+
             command +
             '\\s+"([^"]+)"',
+
             "i"
+
         );
 
 
     const result =
-        text.match(expression);
+        text.match(
+            expression
+        );
 
 
     return result
@@ -875,6 +1475,10 @@ function readCommandValue(
 }
 
 
+/* =========================================================
+   BOTÃO IMPORTAR
+   ========================================================= */
+
 el.importButton.addEventListener(
     "click",
     () => {
@@ -883,7 +1487,9 @@ el.importButton.addEventListener(
             el.importInput.value;
 
 
-        if (!text.trim()) {
+        if (
+            !text.trim()
+        ) {
 
             el.importMessage.textContent =
                 "Cole um código primeiro.";
@@ -893,17 +1499,23 @@ el.importButton.addEventListener(
         }
 
 
+        /*
+            COR RGB
+        */
+
         const r =
             readCommandValue(
                 text,
                 "cl_crosshaircolor_r"
             );
 
+
         const g =
             readCommandValue(
                 text,
                 "cl_crosshaircolor_g"
             );
+
 
         const b =
             readCommandValue(
@@ -919,11 +1531,19 @@ el.importButton.addEventListener(
         ) {
 
             setColor(
-                rgbToHex(r,g,b)
+                rgbToHex(
+                    r,
+                    g,
+                    b
+                )
             );
 
         }
 
+
+        /*
+            VALORES NUMÉRICOS
+        */
 
         const mappings = [
 
@@ -967,7 +1587,13 @@ el.importButton.addEventListener(
 
 
         mappings.forEach(
-            ([command, range, number]) => {
+            (
+                [
+                    command,
+                    range,
+                    number
+                ]
+            ) => {
 
                 const value =
                     readCommandValue(
@@ -976,7 +1602,9 @@ el.importButton.addEventListener(
                     );
 
 
-                if (value !== null) {
+                if (
+                    value !== null
+                ) {
 
                     range.value =
                         value;
@@ -990,6 +1618,10 @@ el.importButton.addEventListener(
         );
 
 
+        /*
+            PONTO CENTRAL
+        */
+
         const dot =
             readCommandValue(
                 text,
@@ -997,13 +1629,19 @@ el.importButton.addEventListener(
             );
 
 
-        if (dot !== null) {
+        if (
+            dot !== null
+        ) {
 
             el.dot.checked =
                 dot === "1";
 
         }
 
+
+        /*
+            CONTORNO
+        */
 
         const outline =
             readCommandValue(
@@ -1012,7 +1650,9 @@ el.importButton.addEventListener(
             );
 
 
-        if (outline !== null) {
+        if (
+            outline !== null
+        ) {
 
             el.outline.checked =
                 outline === "1";
@@ -1020,17 +1660,17 @@ el.importButton.addEventListener(
         }
 
 
-        const style =
-            readCommandValue(
-                text,
-                "cl_crosshairstyle"
-            );
+        /*
+            STYLE
 
+            Nesta versão mantemos Style 4.
+            O teste de resolução é independente.
+        */
 
-        if (style !== null) {
+        if (el.style) {
 
             el.style.value =
-                style;
+                4;
 
         }
 
@@ -1043,131 +1683,295 @@ el.importButton.addEventListener(
 
 
         document
-            .getElementById("editor")
+            .getElementById(
+                "editor"
+            )
             .scrollIntoView({
-                behavior: "smooth"
+
+                behavior:
+                    "smooth"
+
             });
 
     }
 );
 
 
-/* PRESETS */
+/* =========================================================
+   PRESETS
+   ========================================================= */
 
 const presets = {
 
     dot: {
-        color: "#FFFFFF",
-        size: 0,
-        thickness: 1,
-        gap: -20,
-        dot: true,
-        outline: false
+
+        color:
+            "#FFFFFF",
+
+        size:
+            0,
+
+        thickness:
+            1,
+
+        gap:
+            -5,
+
+        dot:
+            true,
+
+        outline:
+            false
+
     },
+
 
     classic: {
-        color: "#A8FF1F",
-        size: 5,
-        thickness: 1,
-        gap: -2,
-        dot: false,
-        outline: true
+
+        color:
+            "#A8FF1F",
+
+        size:
+            5,
+
+        thickness:
+            1,
+
+        gap:
+            -2,
+
+        dot:
+            false,
+
+        outline:
+            true
+
     },
+
 
     tight: {
-        color: "#00FFFF",
-        size: 3,
-        thickness: 1,
-        gap: -8,
-        dot: true,
-        outline: false
+
+        color:
+            "#00FFFF",
+
+        size:
+            3,
+
+        thickness:
+            1,
+
+        gap:
+            -4,
+
+        dot:
+            true,
+
+        outline:
+            false
+
     },
 
+
     large: {
-        color: "#FF3131",
-        size: 8,
-        thickness: 2,
-        gap: 2,
-        dot: false,
-        outline: true
+
+        color:
+            "#FF3131",
+
+        size:
+            8,
+
+        thickness:
+            2,
+
+        gap:
+            1,
+
+        dot:
+            false,
+
+        outline:
+            true
+
     }
 
 };
 
 
+/* =========================================================
+   APLICAR PRESET
+   ========================================================= */
+
 document
-    .querySelectorAll(".preset-card")
-    .forEach(button => {
+    .querySelectorAll(
+        ".preset-card"
+    )
+    .forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+            button.addEventListener(
+                "click",
+                () => {
 
-                const preset =
-                    presets[
-                        button.dataset.preset
-                    ];
+                    const preset =
+                        presets[
+                            button.dataset.preset
+                        ];
 
 
-                if (!preset) {
-                    return;
+                    if (
+                        !preset
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    setColor(
+                        preset.color
+                    );
+
+
+                    el.size.value =
+                    el.sizeNumber.value =
+                        preset.size;
+
+
+                    el.thickness.value =
+                    el.thicknessNumber.value =
+                        preset.thickness;
+
+
+                    el.gap.value =
+                    el.gapNumber.value =
+                        preset.gap;
+
+
+                    el.fixedGap.value =
+                    el.fixedGapNumber.value =
+                        preset.gap;
+
+
+                    el.dot.checked =
+                        preset.dot;
+
+
+                    el.outline.checked =
+                        preset.outline;
+
+
+                    el.alpha.value =
+                    el.alphaNumber.value =
+                        255;
+
+
+                    /*
+                        STYLE 4
+                    */
+
+                    if (el.style) {
+
+                        el.style.value =
+                            4;
+
+                    }
+
+
+                    update();
+
+
+                    document
+                        .getElementById(
+                            "editor"
+                        )
+                        .scrollIntoView({
+
+                            behavior:
+                                "smooth"
+
+                        });
+
                 }
+            );
+
+        }
+    );
 
 
-                setColor(
-                    preset.color
-                );
+/* =========================================================
+   INICIALIZAÇÃO
+   ========================================================= */
+
+/*
+    CONFIGURAÇÃO INICIAL DA MIRA
+*/
+
+setColor(
+    "#FFFFFF"
+);
 
 
-                el.size.value =
-                el.sizeNumber.value =
-                    preset.size;
+/*
+    STYLE 4
+*/
+
+if (el.style) {
+
+    el.style.value =
+        4;
+
+}
 
 
-                el.thickness.value =
-                el.thicknessNumber.value =
-                    preset.thickness;
+/*
+    RESOLUÇÃO PADRÃO
+
+    1920 × 1080 será nossa resolução
+    de referência para a calibração.
+*/
+
+if (el.gameResolution) {
+
+    el.gameResolution.value =
+        "1920x1080";
+
+}
 
 
-                el.gap.value =
-                el.gapNumber.value =
-                    preset.gap;
+/*
+    GARANTE QUE OS CAMPOS DA
+    RESOLUÇÃO PERSONALIZADA
+    COMECEM ESCONDIDOS.
+*/
 
+if (el.customResolution) {
 
-                el.fixedGap.value =
-                el.fixedGapNumber.value =
-                    preset.gap;
-
-
-                el.dot.checked =
-                    preset.dot;
-
-
-                el.outline.checked =
-                    preset.outline;
-
-
-                el.alpha.value =
-                el.alphaNumber.value =
-                    255;
-
-
-                update();
-
-
-                document
-                    .getElementById("editor")
-                    .scrollIntoView({
-                        behavior: "smooth"
-                    });
-
-            }
+    el.customResolution
+        .classList
+        .add(
+            "hidden"
         );
 
-    });
+}
 
 
-/* START */
+/*
+    TEXTO INICIAL DO PREVIEW
+*/
 
-setColor("#FFFFFF");
+if (
+    el.resolutionPreviewLabel
+) {
+
+    el.resolutionPreviewLabel
+        .textContent =
+        "PREVIEW • 1920×1080";
+
+}
+
+
+/*
+    PRIMEIRA ATUALIZAÇÃO
+*/
+
 update();
