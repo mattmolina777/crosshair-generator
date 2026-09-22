@@ -20,6 +20,11 @@
         rel="stylesheet"
         href="css/style.css"
     >
+
+    <style>
+        .resolution-control{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.resolution-control label{font-size:11px;font-weight:800;letter-spacing:.08em;opacity:.72}.resolution-control select,.custom-resolution input{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:inherit;border-radius:8px;min-height:34px;padding:0 10px;outline:none}.resolution-control select:focus,.custom-resolution input:focus{border-color:#A8FF1F}.custom-resolution{display:flex;align-items:center;gap:6px}.custom-resolution.hidden{display:none}.custom-resolution input{width:82px}#crosshairStyle:disabled{opacity:.72;cursor:not-allowed}@media(max-width:720px){.resolution-control{width:100%}.resolution-control select{flex:1;min-width:150px}}
+    </style>
+
 </head>
 
 
@@ -308,6 +313,26 @@
 
 
 
+                        <!-- RESOLUÇÃO DO JOGO -->
+                        <div class="resolution-control">
+                            <label for="gameResolution">RESOLUÇÃO</label>
+                            <select id="gameResolution" aria-label="Resolução do jogo">
+                                <option value="1280x720">1280 × 720</option>
+                                <option value="1366x768">1366 × 768</option>
+                                <option value="1600x900">1600 × 900</option>
+                                <option value="1920x1080" selected>1920 × 1080</option>
+                                <option value="2560x1440">2560 × 1440</option>
+                                <option value="3840x2160">3840 × 2160</option>
+                                <option value="custom">PERSONALIZADA</option>
+                            </select>
+                            <div class="custom-resolution hidden" id="customResolution">
+                                <input id="customResolutionWidth" type="number" min="640" max="7680" step="1" value="1920" aria-label="Largura da resolução">
+                                <span>×</span>
+                                <input id="customResolutionHeight" type="number" min="480" max="4320" step="1" value="1080" aria-label="Altura da resolução">
+                            </div>
+                        </div>
+
+
                         <div class="zoom-buttons">
 
                             <button
@@ -387,8 +412,8 @@
 
                     <div class="preview-footer">
 
-                        <span>
-                            PREVIEW APROXIMADO
+                        <span id="resolutionPreviewLabel">
+                            PREVIEW • 1920×1080
                         </span>
 
                         <span id="zoomLabel">
@@ -901,35 +926,10 @@
                         </div>
 
 
-                        <select id="crosshairStyle">
-
-                            <option value="0">
-                                Style 0
+                        <select id="crosshairStyle" disabled>
+                            <option value="4" selected>
+                                Style 4 — Estática
                             </option>
-
-                            <option value="1">
-                                Style 1
-                            </option>
-
-                            <option value="2">
-                                Style 2
-                            </option>
-
-                            <option value="3">
-                                Style 3
-                            </option>
-
-                            <option
-                                value="4"
-                                selected
-                            >
-                                Style 4
-                            </option>
-
-                            <option value="5">
-                                Style 5
-                            </option>
-
                         </select>
 
                     </div>
